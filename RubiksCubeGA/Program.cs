@@ -129,8 +129,6 @@ public class RubiksCube
     private char[,,] GetCubeState()
     { // This may need user input of a cube.
         cubeState = SOLVED_CUBE;
-
-
         return cubeState;
     }
 
@@ -156,7 +154,7 @@ public class RubiksCube
         Console.WriteLine($"                      ╚═══╩═══╩═══╝                      ");
     }
 
-    public void Display(bool colour=true, bool line=true)
+    public void Display(bool colour = true, bool line = true)
     {
         if (colour)
         {
@@ -286,7 +284,7 @@ public class RubiksCube
         Console.ForegroundColor = originalColour;
     }
 
-    public void RotateRow(int row, RotationDirection d=default)
+    public void RotateRow(int row, RotationDirection d = default)
     {
         char[] temp_row_a;
         char[] temp_row_b;
@@ -319,8 +317,7 @@ public class RubiksCube
 
     }
 
-
-    public void RotateCol(int column, RotationDirection d=default)
+    public void RotateCol(int column, RotationDirection d = default)
     {
         char[] temp_column_a;
         char[] temp_column_b;
@@ -351,7 +348,7 @@ public class RubiksCube
         }
     }
 
-    public void RotateFrontFace (RotationDirection d=default)
+    public void RotateFrontFace(RotationDirection d = default)
     {
         char[] temp_slice_a;
         char[] temp_slice_b;
@@ -443,7 +440,6 @@ public class RubiksCube
         return column;
     }
 
-
     private void UpdateCubeCol(int faceIndex, int colIndex, char[] column)
     {
         for (int i = 0; i < 3; i++)
@@ -473,8 +469,6 @@ public class RubiksCube
             which_row_or_col = random.Next(0, 3);
             which_direction = (random.Next(0, 2) == 0 ? RubiksCube.RotationDirection.Clockwise : RubiksCube.RotationDirection.AntiClockwise);
             direction_name = (which_direction == RubiksCube.RotationDirection.Clockwise) ? "clockwise" : "anti-clockwise";
-
-
 
             switch (which_function)
             {
@@ -653,7 +647,7 @@ public class RubiksCubeSolvingFitnessFunction : IFitnessFunction
             //rubiksCubeChromosome.ApplyMoves();
 
         }
-        
+
         /* Note: It may be better to copy the original/initial state into the chromosome
         // so only one parameter is needed when instancing.
 
@@ -702,7 +696,7 @@ public class RubiksCubeSolvingFitnessFunction : IFitnessFunction
             }
 
         }
-       
+
         return fitness;
     }
 
@@ -733,7 +727,7 @@ public class RubiksCubeSolvingFitnessFunction : IFitnessFunction
                     face = ""; // Reset
                 }
             }
-            else { face = ""; Console.WriteLine("FULL RESET"); }     
+            else { face = ""; Console.WriteLine("FULL RESET"); }
         }
 
         return fitness;
@@ -745,11 +739,11 @@ public class RubiksCubeSolvingFitnessFunction : IFitnessFunction
 public class Program
 {
     static void GA(
-        int populationSize=1000,
-        int randomSelectionPortion=10, 
-        int targetFitness=20,
-        double mutationRate=0.3,
-        double crossoverRate=0.9)
+        int populationSize = 1000,
+        int randomSelectionPortion = 10,
+        int targetFitness = 20,
+        double mutationRate = 0.3,
+        double crossoverRate = 0.9)
     {
         RubiksCube myCube = new RubiksCube();
         //myCube.Shuffle(100, false);

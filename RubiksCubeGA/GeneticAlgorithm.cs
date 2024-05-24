@@ -600,7 +600,7 @@ namespace RubiksCubeGA
                 if (cell == target_colour)
                 {
                     //Console.WriteLine($"[+1] FACE {face}: Matching cell found.");
-                    points += $"[+1] FACE {face}: Cell {count%9+1} match.{Environment.NewLine}";
+                    points += $"[+1] FACE {face}: Cell {count % 9 + 1} match.{Environment.NewLine}";
                     fitness += 1;
                     face_outOf9 += 1;
                 }
@@ -665,7 +665,7 @@ namespace RubiksCubeGA
             rubiksCube.Display();
         }
 
-        public void Inspect(BinaryChromosome chromosome, bool extended=false)
+        public void Inspect(BinaryChromosome chromosome, bool extended = false)
         { // Provides feedback on attributes of instance and class
 
             Console.WriteLine($"" +
@@ -702,5 +702,5 @@ namespace RubiksCubeGA
     }
 
 
-    
+
 }

@@ -101,8 +101,8 @@ namespace RubiksCubeGA
             Console.WriteLine("      |__] |___ | \\| |___  |  | |___    |  | |___ |__] |__| |  \\ |  |  |  | |  |     ");
             Console.WriteLine();
             GeneticAlgorithm(
-                mutationRate:0.2,
-                targetFitness:114); //Current max
+                mutationRate: 0.2,
+                targetFitness: 114); //Current max
         }
     }
 }

@@ -3,21 +3,43 @@ using Accord.Genetic;
 
 namespace RubiksCubeGA
 {
-    public class Program
+    public class SharedFunctions
+    {
+        public static string CentreMessage(string s, char c = ' ', int width = 85, string justify = "centre")
+        {
+            if (justify == "centre")
+            {
+                int padding = (width - s.Length) / 2;
+                return s.PadLeft(padding + s.Length, c).PadRight(width, c);
+            }
+            else if (justify == "left")
+            {
+                return new string(' ', 22) + s;
+            }
+            else { return s; }
+
+        }
+    }
+
+    public class Program : SharedFunctions
     {
         public static void GeneticAlgorithm(
             int populationSize = 100,
+
+
+
             int randomSelectionPortion = 10,
             double mutationRate = 0.1,
             double crossoverRate = 0.3,
-            int targetFitness = 20)
+            int targetFitness = 60)
         {
             RubiksCube myCube = new RubiksCube();
-            myCube.Shuffle(100, true);
+            myCube.Shuffle(4, true);
+            Console.WriteLine(Environment.NewLine + CentreMessage(" Starting Cube ") + Environment.NewLine);
             myCube.Display();
 
             BinaryChromosome firstChromosome = new BinaryChromosome(64);
-            RubiksCubeFitnessFunction fitnessFunction = new RubiksCubeFitnessFunction(myCube.cubeState.Clone() as char[,,]);
+            RubiksCubeFitnessFunction fitnessFunction = new RubiksCubeFitnessFunction(myCube.cubeState.Clone() as char[,,]); //null);
             EliteSelection selectionMethod = new EliteSelection();
 
             Population population = new Population(
@@ -34,10 +56,8 @@ namespace RubiksCubeGA
             int epochCount = 0;
             double bestFitness = 0;
 
-            Console.WriteLine();
-            Console.WriteLine("                     Press ENTER to run the genetic algorithm.                     ");
+            Console.WriteLine(Environment.NewLine + CentreMessage(" Press ENTER to run the genetic algorithm. ") + Environment.NewLine);
             Console.ReadLine();
-            myCube.Display();
             Console.WriteLine();
 
 
@@ -49,12 +69,12 @@ namespace RubiksCubeGA
                 population.RunEpoch();
 
                 // Get the best individual in the current population
-                BinaryChromosome bestChromosome = population.BestChromosome as BinaryChromosome;
+                BinaryChromosome? bestChromosome = population.BestChromosome as BinaryChromosome;
 
                 // Get the fitness of the best individual in this epoch
                 double currentFitness = fitnessFunction.Evaluate(bestChromosome);
 
-                Console.WriteLine($"                  Epoch {epochCount} | Current Fitness: {currentFitness} | Best Fitness: {bestFitness}"); // take up space with binary instead?
+                Console.WriteLine(CentreMessage($"Epoch {epochCount,4} | Current Fitness: {currentFitness} | Best Fitness: {bestFitness}")); // take up space with binary instead?
 
                 if (currentFitness > bestFitness)
                 {
@@ -70,22 +90,34 @@ namespace RubiksCubeGA
                     }
                 }
 
-                if (bestFitness >= targetFitness)
+                if (currentFitness >= targetFitness)
                 {
-                    Console.WriteLine($"Target fitness of {targetFitness} reached. Stopping.");
-                    if (bestChromosome != null)
-                    {
-                        fitnessFunction.ResetCube();
-                        Console.WriteLine();
-                        fitnessFunction.Display(bestChromosome);
-                        fitnessFunction.Inspect(bestChromosome);
-                        fitnessFunction.ShowPoints(bestChromosome);
-                        Console.ReadLine();
-                    }
+                    Console.WriteLine(CentreMessage($"Target fitness of {targetFitness} reached. Stopping."));
+                    // TODO: Display moves in a readable form.
                     break;
                 }
 
-                if (epochCount % 1000 == 0) { Console.ReadLine(); } // store pause point in a variable?
+                // Increase mutation rate to compensate
+                if (epochCount % 5000 == 0 && population.MutationRate <= 0.9)  // Population limits it to 1.0 automatically, but this prevents messages
+                { // Should this be done after x same fitness values instead of every x epochs?
+                    Console.WriteLine(CentreMessage($"Increasing mutation rate from {population.MutationRate:F3} to {population.MutationRate + 0.1:F3} and forcing mutations."));
+                    population.MutationRate += 0.1;
+
+                    for (int i = 0; i < population.Size; i++)
+                    {
+                        for (int n = 0; n < 1; n++)
+                        { // Force all chromosomes to mutate. Optionally do multiple successive mutations.
+                            //(population[i] as BinaryChromosome)?.Mutate();
+                        }
+                    }
+                }
+
+                if (epochCount % 1000 == 0) { Console.Read(); } // store pause point in a variable?
+            }
+
+            while (Console.ReadKey(true).Key == ConsoleKey.Enter)
+            {
+                // Prevent program from terminating unless something is entered
             }
         }
 
@@ -101,8 +133,7 @@ namespace RubiksCubeGA
             Console.WriteLine("      |__] |___ | \\| |___  |  | |___    |  | |___ |__] |__| |  \\ |  |  |  | |  |     ");
             Console.WriteLine();
             GeneticAlgorithm(
-                mutationRate: 0.2,
-                targetFitness: 114); //Current max
+                mutationRate: 0.2);
         }
     }
 }

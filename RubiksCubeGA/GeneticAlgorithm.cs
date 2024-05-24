@@ -1,5 +1,6 @@
 ﻿using Accord;
 using Accord.Genetic;
+using System.Security.Cryptography.X509Certificates;
 
 
 
@@ -8,7 +9,7 @@ namespace RubiksCubeGA
     // Needed for RotationDirection
     using static RubiksCube;
 
-    public class RubiksCube
+    public class RubiksCube : SharedFunctions
     {
         public char[,,] cubeState;
         public readonly char[,,] SOLVED_CUBE =
@@ -419,17 +420,16 @@ namespace RubiksCubeGA
 
         }
 
-        public void Shuffle(int moves = 50, bool showShuffling = false)
+        public void Shuffle(int moves = 51, bool showShuffling = false)
         {
+
             if (showShuffling)
             {
                 Display();
-                Console.WriteLine(Environment.NewLine +
-                    "                                PRESS ENTER TO SHUFFLE                                 " +
-                    Environment.NewLine);
+                Console.WriteLine(Environment.NewLine + CentreMessage(" PRESS ENTER TO SHUFFLE ") + Environment.NewLine);
                 Console.ReadLine();
                 Console.WriteLine();
-                Console.WriteLine("_____________________________________ SHUFFLING ____________________________________");
+                Console.WriteLine(CentreMessage(" SHUFFLING ", c: '-'));
                 Console.WriteLine();
             }
 
@@ -439,7 +439,8 @@ namespace RubiksCubeGA
             RubiksCube.RotationDirection which_direction;
             string direction_name;
 
-            for (int n = 0; n < moves + 1; n++)
+            // TODO NOTE: Use this for description of move sequence also?
+            for (int n = 1; n < moves + 1; n++)
             {
                 which_function = random.Next(0, 4);
                 which_row_or_col = random.Next(0, 3);
@@ -450,19 +451,20 @@ namespace RubiksCubeGA
                 {
                     case 0:
                         RotateRow(which_row_or_col, which_direction);
-                        if (showShuffling) { Console.Write($"{Environment.NewLine}                            [{n}] Rotating row {which_row_or_col} {direction_name}"); }
+                        //if (showShuffling) { Console.Write($"{Environment.NewLine}                            [{n}] Rotating row {which_row_or_col} {direction_name}"); }
+                        if (showShuffling) { Console.Write(Environment.NewLine + CentreMessage($"[{n}] Rotating row {which_row_or_col} {direction_name}")); }
                         break;
                     case 1:
                         RotateCol(which_row_or_col, which_direction);
-                        if (showShuffling) { Console.Write($"{Environment.NewLine}                            [{n}] Rotating column {which_row_or_col} {direction_name}"); }
+                        if (showShuffling) { Console.Write(Environment.NewLine + CentreMessage($"[{n}] Rotating column {which_row_or_col} {direction_name}")); }
                         break;
                     case 2:
                         RotateFrontFace(which_direction);
-                        if (showShuffling) { Console.Write($"{Environment.NewLine}                            [{n}] Rotating front face {direction_name}"); }
+                        if (showShuffling) { Console.Write(Environment.NewLine + CentreMessage($"[{n}] Rotating front face {direction_name}")); }
                         break;
                     case 3:
                         RotateBackFace(which_direction);
-                        if (showShuffling) { Console.Write($"{Environment.NewLine}                            [{n}] Rotating back face {direction_name}"); }
+                        if (showShuffling) { Console.Write(Environment.NewLine + CentreMessage($"[{n}] Rotating back face {direction_name}")); }
                         break;
                     default: break;
                 }
@@ -473,7 +475,7 @@ namespace RubiksCubeGA
                     Display();
                 }
             }
-            Console.WriteLine("____________________________________________________________________________________");
+            Console.WriteLine(new string('_', 85));
             Console.WriteLine();
 
         }
@@ -513,7 +515,7 @@ namespace RubiksCubeGA
 
 
 
-    public class RubiksCubeFitnessFunction : IFitnessFunction
+    public class RubiksCubeFitnessFunction : SharedFunctions, IFitnessFunction
     {
         /// <summary>
         /// 
@@ -531,10 +533,12 @@ namespace RubiksCubeGA
         private Dictionary<char, Action> moves;
 
         private int population_count;
-        private string points = "";
+        private string points_log = "";
 
-        public RubiksCubeFitnessFunction(char[,,] originalCubeState)
+        public RubiksCubeFitnessFunction(char[,,]? originalCubeState)
         {
+            if (originalCubeState == null) { throw new Exception("[ERROR] Cube state was null."); }
+
             // Create a new cube "deep copy" to test out moves on
             rubiksCube.cubeState = (char[,,])originalCubeState.Clone();
 
@@ -544,38 +548,64 @@ namespace RubiksCubeGA
             // Initialize the dictionary, definining all possible moves
             moves = new Dictionary<char, Action>
         {
-            {'0', () => rubiksCube.RotateRow(0, RotationDirection.Clockwise)},
-            {'1', () => rubiksCube.RotateRow(1, RotationDirection.Clockwise)},
-            {'2', () => rubiksCube.RotateRow(2, RotationDirection.Clockwise)},
-            {'3', () => rubiksCube.RotateCol(0, RotationDirection.Clockwise)},
-            {'4', () => rubiksCube.RotateCol(1, RotationDirection.Clockwise)},
-            {'5', () => rubiksCube.RotateCol(2, RotationDirection.Clockwise)},
-            {'6', () => rubiksCube.RotateFrontFace(RotationDirection.Clockwise)},
-            {'7', () => rubiksCube.RotateBackFace(RotationDirection.Clockwise)},
-            {'8', () => rubiksCube.RotateRow(0, RotationDirection.AntiClockwise)},
-            {'9', () => rubiksCube.RotateRow(1, RotationDirection.AntiClockwise)},
-            {'A', () => rubiksCube.RotateRow(2, RotationDirection.AntiClockwise)},
-            {'B', () => rubiksCube.RotateCol(0, RotationDirection.AntiClockwise)},
-            {'C', () => rubiksCube.RotateCol(1, RotationDirection.AntiClockwise)},
-            {'D', () => rubiksCube.RotateCol(2, RotationDirection.AntiClockwise)},
-            {'E', () => rubiksCube.RotateFrontFace(RotationDirection.AntiClockwise)},
-            {'F', () => rubiksCube.RotateBackFace(RotationDirection.AntiClockwise)}
+            {'0', () => rubiksCube.RotateRow(0, RotationDirection.Clockwise)}, // U
+            {'1', () => rubiksCube.RotateRow(1, RotationDirection.Clockwise)}, // E
+            {'2', () => rubiksCube.RotateRow(2, RotationDirection.Clockwise)}, // D
+            {'3', () => rubiksCube.RotateCol(0, RotationDirection.Clockwise)}, // L
+            {'4', () => rubiksCube.RotateCol(1, RotationDirection.Clockwise)}, // M
+            {'5', () => rubiksCube.RotateCol(2, RotationDirection.Clockwise)}, // R
+            {'6', () => rubiksCube.RotateFrontFace(RotationDirection.Clockwise)}, // F
+            {'7', () => rubiksCube.RotateBackFace(RotationDirection.Clockwise)}, // B
+            {'8', () => rubiksCube.RotateRow(0, RotationDirection.AntiClockwise)}, // U'
+            {'9', () => rubiksCube.RotateRow(1, RotationDirection.AntiClockwise)}, // E'
+            {'A', () => rubiksCube.RotateRow(2, RotationDirection.AntiClockwise)}, // D'
+            {'B', () => rubiksCube.RotateCol(0, RotationDirection.AntiClockwise)}, // L'
+            {'C', () => rubiksCube.RotateCol(1, RotationDirection.AntiClockwise)}, // M'
+            {'D', () => rubiksCube.RotateCol(2, RotationDirection.AntiClockwise)}, // R'
+            {'E', () => rubiksCube.RotateFrontFace(RotationDirection.AntiClockwise)}, // F'
+            {'F', () => rubiksCube.RotateBackFace(RotationDirection.AntiClockwise)} // B'
         };
 
+            // NOTE: Rotation of the middle face (between F and B) is not possible (S and S').
+            //       Not moving is also not an option. A solved cube at 15 moves will be messed up by the 16th.
+
             population_count = 0;
+
+            /*
+            Dictionary<char, string> move_names = new Dictionary<char, string>
+            {
+                {'0', "U"},
+                {'1', "E"},
+                {'2', "D"},
+                {'3', "L"},
+                {'4', "M"},
+                {'5', "R"},
+                {'6', "F"},
+                {'7', "B"},
+                {'8', "U'"},
+                {'9', "E'"},
+                {'A', "D'"},
+                {'B', "L'"},
+                {'C', "M'"},
+                {'D', "R'"},
+                {'E', "F'"},
+                {'F', "B'"}
+            };
+            */
+
+
         }
 
-        public double Evaluate(IChromosome chromosome)
+        public double Evaluate(IChromosome? chromosome)
         {
+            if (chromosome == null) { throw new Exception("[ERROR] Chromosome was null."); }
 
             // RESET BEFORE EACH FITNESS CHECK
             double fitness = 0;
             ResetCube();
-            points = "";
+            points_log = "";
 
             population_count++;
-            // RESET CUBE STATE (Before each fitness check)
-
 
             //Console.WriteLine($"{population_count}: {chromosome}"); // another pause to show this, also number them?
             Decode(chromosome);
@@ -591,41 +621,60 @@ namespace RubiksCubeGA
 
             int face = 0;
             int count = 0;
-            int face_outOf9 = 0;
+
+            int points_per_face = 0;
+            string points_log_per_face = "";
+
+            List<int> matching_cells = new List<int>();
 
             // Iterate through all 54 cells on cube
             foreach (char cell in rubiksCube.cubeState)
             {
-                // Reward colours matching middle of face
+                // Found a cell that matches the middle
                 if (cell == target_colour)
                 {
-                    //Console.WriteLine($"[+1] FACE {face}: Matching cell found.");
-                    points += $"[+1] FACE {face}: Cell {count % 9 + 1} match.{Environment.NewLine}";
-                    fitness += 1;
-                    face_outOf9 += 1;
+                    matching_cells.Add(count % 9 + 1); // Store position of matching cell
                 }
 
                 count++;
                 if (count % 9 == 0)
-                { // Moved onto a new face - RESET
+                { // All cells in face checked
 
-                    // Penalise a face with no matching cells
-                    if (face_outOf9 == 1)
-                    {
-                        //Console.WriteLine($"[-1] FACE {face}: No matching cells.");
-                        points += $"[-1] FACE {face}: No matching cells.{Environment.NewLine}";
-                        fitness--;
+                    if (matching_cells.Count > 1)
+                    { // At least one cell matched
+                        //Console.WriteLine("MATCHING CELLS FOUND");
+
+                        if (matching_cells.Count == 9)
+                        { // Reward for all cells matched 
+                            points_per_face += 10;
+                            points_log_per_face = "Face completed as all cells matched.";
+                            //Console.WriteLine("ALL CELLS MATCHING");
+                        }
+                        else
+                        {  // Reward for each cell that matched
+                            points_per_face += matching_cells.Count;
+                            points_log_per_face = $"Matching cells: {string.Join(",", matching_cells)}";
+                            //Console.WriteLine("SOME MATCHING CELLS");
+                        }
+                    }
+                    else
+                    { // Penalise for no matching cells
+                        points_per_face -= 5;
+                        points_log_per_face = "No matching cells (only middle).";
+
+
                     }
 
-                    // Reward a complete face
-                    if (face_outOf9 == 9)
-                    {
-                        points += $"[+10] FACE {face}: Complete!.{Environment.NewLine}";
-                        fitness += 10;
-                    }
+                    fitness += points_per_face;
 
-                    face_outOf9 = 0;
+                    // Save fitness points log for that face, to all be displayed at once later. LEFT or CENTRE justify
+                    points_log += CentreMessage($"[{points_per_face.ToString("+#;-#;0")}] Face {face + 1} - {points_log_per_face}", justify: "centre") + Environment.NewLine;
+
+                    // Reset for next face
                     face++;
+                    points_per_face = 0;
+                    points_log_per_face = "";
+                    matching_cells = new List<int>();
 
                     if (face < 6)
                     {
@@ -636,7 +685,7 @@ namespace RubiksCubeGA
                 }
 
             }
-
+            //Console.WriteLine(points_log);
             return fitness;
 
         }
@@ -686,11 +735,11 @@ namespace RubiksCubeGA
 
         public void ShowPoints(BinaryChromosome chromosome)
         {
-            points = "";
+            points_log = "";
             Evaluate(chromosome);
-            Console.WriteLine(points);
+            Console.WriteLine(points_log);
             population_count--;
-            points = "";
+            points_log = "";
         }
 
         public void ResetCube()

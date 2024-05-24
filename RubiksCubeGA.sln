@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RubiksCubeGA", "RubiksCubeGA\RubiksCubeGA.csproj", "{73203397-84D0-477A-90E3-B088BB50D420}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73203397-84D0-477A-90E3-B088BB50D420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73203397-84D0-477A-90E3-B088BB50D420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73203397-84D0-477A-90E3-B088BB50D420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73203397-84D0-477A-90E3-B088BB50D420}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0AF6F35F-4C5A-40F0-A03B-2E8D1FAB0F68}
+	EndGlobalSection
+EndGlobal

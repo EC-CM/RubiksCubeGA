@@ -1,1 +1,55 @@
-﻿
+﻿Increase crossover and mutation rates after getting stuck in a local maximum
+Run a second GA for X epochs and then crossover that with the old one. Double population or split 50:50.
+
+
+I just realised a problem:
+- There is no middle depth rotation - S (between F and B)
+- There is no null move
+
+
+Clockwise and anticlockwise can be difficult to understand.
+Middle slices are a matter of perspective, so you have to treat them as if you are looking from the left or top faces.
+The right and bottom have to be treated the same as the middle, which is counterintuitive for what makes sense. 
+
+Maybe I'll change that in the future.
+
+
+
+
+Help:
+
+Adjusting the mutation rate and crossover rate in a genetic algorithm can have a significant impact on its exploration-exploitation trade-off. Here are some general guidelines to consider when dealing with a local maximum:
+
+### 1. **Increase Mutation Rate:**
+   - A higher mutation rate introduces more randomness into the population, helping to escape local optima.
+   - If the algorithm is getting stuck, gradually increase the mutation rate and observe its impact on diversity.
+
+### 2. **Decrease Crossover Rate:**
+   - Lowering the crossover rate reduces the influence of crossover, potentially preventing the algorithm from converging too quickly to a suboptimal solution.
+   - Experiment with reducing the crossover rate to allow more exploration via mutation.
+
+### 3. **Dynamic Mutation and Crossover Rates:**
+   - Consider implementing adaptive strategies where mutation and crossover rates change dynamically based on the algorithm's progress or convergence.
+   - For example, you could start with a higher mutation rate for exploration and gradually decrease it as the algorithm converges.
+
+### 4. **Tune Both Parameters Simultaneously:**
+   - Fine-tune the mutation and crossover rates simultaneously to find the right balance.
+   - Running multiple experiments with different combinations of mutation and crossover rates can help identify the optimal settings.
+
+### 5. **Diversify Initial Population:**
+   - Ensure that your initial population is diverse to avoid starting in a narrow region of the solution space.
+   - This can be achieved through various initialization strategies, such as random initialization or seeding with diverse solutions.
+
+### 6. **Elitism:**
+   - Consider incorporating elitism, where the best individuals from the previous generation are preserved in each new generation.
+   - Elitism helps maintain good solutions and prevents premature convergence to a suboptimal solution.
+
+### 7. **Niching Techniques:**
+   - Explore niche formation techniques to encourage diversity within the population.
+   - Techniques like crowding or sharing functions can penalize solutions that are too similar, promoting a more diverse population.
+
+### 8. **Fine-Tune Based on Problem Characteristics:**
+   - The ideal mutation and crossover rates can depend on the characteristics of the problem you're solving.
+   - Experiment with different values based on the specific nature of your optimization problem.
+
+Remember that there is no one-size-fits-all solution, and finding the right combination of parameters often requires experimentation and a good understanding of the problem at hand. It's recommended to iterate and test different parameter settings to observe their impact on the algorithm's performance.

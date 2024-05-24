@@ -25,9 +25,6 @@ namespace RubiksCubeGA
     {
         public static void GeneticAlgorithm(
             int populationSize = 100,
-
-
-
             int randomSelectionPortion = 10,
             double mutationRate = 0.1,
             double crossoverRate = 0.3,
@@ -35,6 +32,13 @@ namespace RubiksCubeGA
         {
             RubiksCube myCube = new RubiksCube();
             myCube.Shuffle(4, true);
+
+            //myCube.ResetCube(debug:true);
+            //myCube.Display(contents: null);
+            //myCube.RotateFrontFace(RubiksCube.RotationDirection.AntiClockwise);
+            //myCube.Display(contents:null);
+            //myCube.TestAllCubeMoves(debug:true);
+
             Console.WriteLine(Environment.NewLine + CentreMessage(" Starting Cube ") + Environment.NewLine);
             myCube.Display();
 
@@ -92,8 +96,9 @@ namespace RubiksCubeGA
 
                 if (currentFitness >= targetFitness)
                 {
+                    if (bestChromosome != null) { fitnessFunction.DescribeMoves(bestChromosome); }
+                    //fitnessFunction.Display(bestChromosome);
                     Console.WriteLine(CentreMessage($"Target fitness of {targetFitness} reached. Stopping."));
-                    // TODO: Display moves in a readable form.
                     break;
                 }
 
@@ -112,7 +117,10 @@ namespace RubiksCubeGA
                     }
                 }
 
-                if (epochCount % 1000 == 0) { Console.Read(); } // store pause point in a variable?
+                if (epochCount % 1000 == 0)
+                { // Pauses program every X epochs so user can scroll
+                    if ((Console.ReadKey(true).Key != ConsoleKey.Enter) && bestChromosome != null) { fitnessFunction.Display(bestChromosome); Console.ReadKey(); }
+                } // store pause point in a variable?
             }
 
             while (Console.ReadKey(true).Key == ConsoleKey.Enter)

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AForge.Genetic" Version="2.2.5" />
+    <PackageReference Include="Accord.Genetic" Version="3.8.0" />
   </ItemGroup>
 
   <ItemGroup>

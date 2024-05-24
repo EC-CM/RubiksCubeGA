@@ -1,0 +1,66 @@
+﻿
+Bit Representation 1 - Leading bit represents direction.
+
+RotateRow:
+
+    [0] - 0000 - RotateRow(0, C)
+    [1] - 0001 - RotateRow(1, C)
+    [2] - 0010 - RotateRow(2, C)
+    [8] - 1000 - RotateRow(0, AC)
+    [9] - 1001 - RotateRow(1, AC)
+    [A] - 1010 - RotateRow(2, AC)
+
+RotateCol:
+
+    [3] - 0011 - RotateCol(0, C)
+    [4] - 0100 - RotateCol(1, C)
+    [5] - 0101 - RotateCol(2, C)
+    [B] - 1011 - RotateCol(0, AC)
+    [C] - 1100 - RotateCol(1, AC)
+    [D] - 1101 - RotateCol(2, AC)
+
+RotateFrontFace:
+
+    [6] - 0110 - RotateFrontFace(C)
+    [E] - 1110 - RotateFrontFace(AC)
+
+RotateBackFace:
+
+    [7] - 0111 - RotateBackFace(C)
+    [F] - 1111 - RotateBackFace(AC)
+
+
+
+
+
+Bit Representation 2 - Moves are in order
+
+RotateRow:
+
+    [0] - 0000 - RotateRow(0, C)
+    [1] - 0001 - RotateRow(1, C)
+    [2] - 0010 - RotateRow(2, C)
+    [3] - 0011 - RotateRow(0, AC)
+    [4] - 0100 - RotateRow(1, AC)
+    [5] - 0101 - RotateRow(2, AC)
+
+RotateCol:
+
+    [6] - 0110 - RotateCol(0, C)
+    [7] - 0111 - RotateCol(1, C)
+    [8] - 1000 - RotateCol(2, C)
+    [9] - 1001 - RotateCol(0, AC)
+    [A] - 1010 - RotateCol(1, AC)
+    [B] - 1011 - RotateCol(2, AC)
+
+RotateFrontFace:
+
+    [C] - 1100 - RotateFrontFace(C)
+    [D] - 1101 - RotateFrontFace(AC)
+
+RotateBackFace:
+
+    [E] - 1110 - RotateBackFace(C)
+    [F] - 1111 - RotateBackFace(AC)
+
+

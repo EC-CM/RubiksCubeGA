@@ -1,7 +1,7 @@
 # Rubik's Cube: Genetic Algorithm
 This project was created for the Artificial Intelligence module during the second year of my degree, submitted in December 2023.
 
-The cube state and functions are represented with their own class. A 64 bit binary chromosome represents a random sequence of 16 moves, with each four bits representing 1 or 16 possible move types. Due to limitations, the "standing" layer (clockwise/anticlockwise) and the option to not move are not represented.
+The cube state and functions are represented with their own class. A 64 bit binary chromosome represents a random sequence of 16 moves, with each four bits representing 1 of 16 possible move types. Due to limitations, the "standing" layer (clockwise/anticlockwise) and the option to not move are not represented.
 
 The fitness function evaluates each face of the cube and gives each a higher score based on the number of squares surrounding the middle square that match its colour. A completed face scores more points and a face with no matches is penalised.
 

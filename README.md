@@ -20,22 +20,22 @@ I did not practice version control through this project, so I have compiled all 
 
 ## Demonstration of the program working
 
-                                                         Shuffling the cube 4 times
+    Shuffling the cube 4 times
 
 ![RubiksCubeGA Shuffling](https://github.com/EC-CM/RubiksCubeGA/assets/114674192/944c68f1-b4d4-4547-be56-c33b4e1ae549)
 &nbsp;
 
-                                                             Result of shuffle
+    Result of shuffle
 
 ![RubiksCubeGA Shuffled](https://github.com/EC-CM/RubiksCubeGA/assets/114674192/7b9d5889-ab84-47b4-97b3-67cfe5ee1931)
 &nbsp;
 
-                                              Result of running the program for multiple epochs
+    Result of running the program for multiple epochs
 
 ![RubiksCubeGA Solving](https://github.com/EC-CM/RubiksCubeGA/assets/114674192/66c68eb5-fec0-4e12-a849-3c1e39202f6a)
 &nbsp;
 
-                                                             The cube is solved
+    The cube is solved
 
 ![RubiksCubeGA Solved](https://github.com/EC-CM/RubiksCubeGA/assets/114674192/05b0db0d-7faf-4ad9-a21c-04db85da5f53)
 

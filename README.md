@@ -1,4 +1,4 @@
-# Rubik's Cube: Genetic Algorithm
+# Rubik's Cube Solver: Genetic Algorithm
 
 ![RubiksCubeGA Start](https://github.com/EC-CM/RubiksCubeGA/assets/114674192/e9720489-2bb1-4006-8810-1ee3f04753cf)
 
